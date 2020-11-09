@@ -1,4 +1,5 @@
-﻿using PruebaHispatec.Models;
+﻿using Newtonsoft.Json;
+using PruebaHispatec.Models;
 using System.Web.Mvc;
 
 namespace PruebaHispatec.Controllers
@@ -23,6 +24,13 @@ namespace PruebaHispatec.Controllers
         {
             var conteo = Buscardor.Buscador.Contar(model.sBusqueda, model.sTexto);
             return Json(conteo);
+        }
+
+        [HttpPost]
+        public JsonResult Repetidas(IndexModel model)
+        {
+            var lista = JsonConvert.SerializeObject(Buscardor.Buscador.listaRepetidos(model.sTexto));
+            return Json(lista);
         }
 
         public ActionResult Contact()

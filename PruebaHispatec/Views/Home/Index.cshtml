@@ -24,17 +24,59 @@
         @Html.TextAreaFor(m => Model.sTexto, new { style = "max-width: 100% !important; width: 100% !important; height: 200px" })
     </div>
 </div>
+<br />
+<br />
+<div class="row">
+    <div class="col-md-1">
+        <button id="btnRepetidas">Repetidas</button>
+    </div>
+</div>
+<br />
+<br />
+<div class="row">
+    <table id="tbRepeticiones" style="border-collapse: collapse">
+        <thead>
+            <tr>
+                <td><strong>Expresión</strong></td>
+                <td><strong>Repetición</strong></td>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
 @section scripts {
     <script>
-        $(function () {
-            $("#btnContar").click(function () {
-                $('#nConteo').val(0)
-                var obj = {
-                    sBusqueda: $('#sBusqueda').val(),
-                    sTexto: $('#sTexto').val()
-                }
-                $.post('@Url.Action("Contar", "Home")', obj) .done(function (result) { $('#nConteo').val(result || 0) })
-            })
+    $(function () {
+        $("#btnContar").click(function () {
+            $('#nConteo').val(0)
+            var obj = { sBusqueda: $('#sBusqueda').val(), sTexto: $('#sTexto').val() }
+            $.post('@Url.Action("Contar", "Home")', obj).done(function (result) { $('#nConteo').val(result || 0) })
         });
+        $("#btnRepetidas").click(function () {
+            var obj = { sTexto: $('#sTexto').val() }
+            $('#tbRepeticiones tbody').html('');
+            $.post('@Url.Action("Repetidas", "Home")', obj).done(function (result) {
+                const repetidas = JSON.parse(result);
+                let bodyTable = "";
+                for (const element in repetidas) { bodyTable += `<tr><td>${element}</td><td>${repetidas[element]}</td></tr>`; }
+                $('#tbRepeticiones tbody').html(bodyTable);
+            });
+        });
+    });
     </script>
 }
+<style>
+    table, th, td {
+        border: 1px solid black;
+    }
+    table thead tr td {
+        text-align: center;
+    }
+    th, td {
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+</style>
