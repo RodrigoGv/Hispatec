@@ -1,0 +1,40 @@
+﻿@model PruebaHispatec.Models.IndexModel
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="row">
+    <br />
+    <div class="col-md-3">
+        Búsqueda:
+        @Html.TextBoxFor(m => Model.sBusqueda)
+    </div>
+    <div class="col-md-1">
+        <button id="btnContar">Contar</button>
+    </div>
+    <div class="col-md-4">
+        Conteo:
+        @Html.TextBoxFor(m => m.nConteo, new { disabled = "disabled" })
+    </div>
+</div>
+<br />
+<br />
+<div class="row">
+    <div class="col-md-12">
+        @Html.TextAreaFor(m => Model.sTexto, new { style = "max-width: 100% !important; width: 100% !important; height: 200px" })
+    </div>
+</div>
+@section scripts {
+    <script>
+        $(function () {
+            $("#btnContar").click(function () {
+                $('#nConteo').val(0)
+                var obj = {
+                    sBusqueda: $('#sBusqueda').val(),
+                    sTexto: $('#sTexto').val()
+                }
+                $.post('@Url.Action("Contar", "Home")', obj) .done(function (result) { $('#nConteo').val(result || 0) })
+            })
+        });
+    </script>
+}
